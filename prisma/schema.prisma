@@ -2,30 +2,29 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
   previewFeatures = ["jsonProtocol"]
 }
 
 datasource db {
-  provider = "postgresql"
-  url = env("POSTGRES_PRISMA_URL") // uses connection pooling
+  provider  = "postgresql"
+  url       = env("POSTGRES_PRISMA_URL") // uses connection pooling
   directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
 }
 
-
 model Account {
-  id                 String  @id @default(cuid())
-  userId             String
-  type               String
-  provider           String
-  providerAccountId  String
-  refresh_token      String?  @db.Text
-  access_token       String?  @db.Text
-  expires_at         Int?
-  token_type         String?
-  scope              String?
-  id_token           String?  @db.Text
-  session_state      String?
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -39,6 +38,7 @@ model Session {
   userId       String
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
   @@index([userId])
 }
 
@@ -58,4 +58,72 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+model Reader {
+  id           String        @id @default(cuid())
+  name         String
+  username     String
+  password     String
+  email        String        @unique
+  birthDate    String
+  transactions Transaction[]
+}
+
+model Item {
+  id                  String            @id @default(cuid())
+  title               String
+  synopsis            String
+  publishingCompanyId String
+  publicationYear     String
+  numberPages         String
+  itemTypeId          String
+  coverImage          String
+  authors             Author[]
+  transactions        Transaction[]
+  itemType            ItemType          @relation(fields: [itemTypeId], references: [id])
+  publishingCompany   PublishingCompany @relation(fields: [publishingCompanyId], references: [id])
+}
+
+model Author {
+  id          String  @id @default(cuid())
+  name        String
+  avatar      String?
+  nationality String
+  items       Item[]
+}
+
+model PublishingCompany {
+  id    String @id @default(cuid())
+  name  String
+  items Item[]
+}
+
+model ItemType {
+  id          String @id @default(cuid())
+  description String
+  items       Item[]
+}
+
+model Transaction {
+  id                String          @id @default(cuid())
+  transactionTypeId String
+  date              DateTime
+  borrowerId        String
+  itemId            String
+  returnDate        DateTime?
+  item              Item            @relation(fields: [itemId], references: [id])
+  borrower          Reader          @relation(fields: [borrowerId], references: [id])
+  transactionType   TransactionType @relation(fields: [transactionTypeId], references: [id])
+}
+
+model TransactionType {
+  id           String        @id @default(cuid())
+  description  String
+  transactions Transaction[]
+}
+
+model ActionLog {
+  id      String @id @default(cuid())
+  entries String
 }
