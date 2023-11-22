@@ -9,7 +9,6 @@ import { api } from "@/lib/api";
 import { nationalities } from "@data/nationality";
 import Iconify from "@/components/shared/iconify";
 import Typography from "@/components/shared/typography";
-import { postAuthor } from "@services/postAuthor";
 
 export default function FormAuthor({ onHandleAuthorRegister, onHandleAuthorUpdate, author, setAuthor }: IFormAuthorPageProps) {
     const [messageApi, contextHolder] = message.useMessage();
@@ -20,9 +19,9 @@ export default function FormAuthor({ onHandleAuthorRegister, onHandleAuthorUpdat
     const onSubmit = async (data: AuthorRegisterForm) => {
         if (author) {
             try {
-                const status = await postAuthor(author);
+                const response = await api.put(`author/${author.id}`, { author });
 
-                if (status == 200) {
+                if (response.status == 200) {
                     reset();
                     onHandleAuthorUpdate(author);
                 }

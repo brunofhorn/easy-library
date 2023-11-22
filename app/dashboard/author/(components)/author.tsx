@@ -6,11 +6,15 @@ import { IAuthor } from "@interfaces/common";
 import { api } from "@/lib/api";
 import FormAuthor from "./form";
 import ListAuthors from "./list";
-import { getAuthor } from "@services/getAuthor";
 
 type AuthorProps = {
     data: IAuthor[];
 };
+
+async function getAuthor(id: string) {
+    const { data } = await api.get(`author/${id}`);
+    return data.author;
+}
 
 export default function Author({ data }: AuthorProps) {
     const [messageApi, contextHolder] = message.useMessage();

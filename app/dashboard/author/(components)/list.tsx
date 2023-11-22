@@ -7,7 +7,6 @@ import { ITable } from "@interfaces/pages";
 import { Button, Input, InputRef, Modal, Skeleton, Space, Table, message } from "antd";
 import { ColumnType, ColumnsType } from "antd/es/table";
 import { FilterConfirmProps } from "antd/es/table/interface";
-import axios from "axios";
 import { Suspense, useRef, useState } from "react";
 
 type DataIndex = keyof IAuthor;
@@ -175,7 +174,7 @@ export default function ListAuthors({ data, onHandleDelete, onHandleEdit }: ITab
     };
 
     const deleteAuthor = async (id: string, name: string) => {
-        const response = await axios.delete(`http://localhost:3000/api/author/${id}`);
+        const response = await api.delete(`author/${id}`);
 
         if (response.status === 200) {
             onHandleDelete(id);
