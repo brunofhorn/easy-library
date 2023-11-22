@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Card, Divider, message } from "antd";
 import { IAuthor } from "@interfaces/common";
 import { api } from "@/lib/api";
+import FormAuthor from "./form";
 
 type AuthorProps = {
     data: IAuthor[];
@@ -68,7 +69,12 @@ export default function Author({ data }: AuthorProps) {
         <>
             {contextHolder}
             <Card className='min-h-full'>
-
+                <FormAuthor
+                    onHandleAuthorRegister={handleAuthorRegister}
+                    onHandleAuthorUpdate={handleAuthorUpdate}
+                    author={author}
+                    setAuthor={setAuthor}
+                />
             </Card>
             <Divider />
             <Card className='min-h-full'>
