@@ -318,7 +318,6 @@ export const FormItem = ({ onHandleItemRegister, onHandleItemUpdate, item, setIt
                         </div>
                     </div>
                     <div className="flex flex-col w-3/12">
-                        {errors.root?.message}
                         <Form.Item
                             label="Imagem da Capa"
                             hasFeedback
