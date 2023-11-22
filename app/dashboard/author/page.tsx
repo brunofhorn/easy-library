@@ -7,7 +7,7 @@ async function getAuthors() {
     return data.authors;
 }
 
-export default async function CatalogAuthor() {
+export default async function AuthorPage() {
     const data = await getAuthors();
 
     return (
