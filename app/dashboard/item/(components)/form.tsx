@@ -1,9 +1,10 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import { Input, Button, Form, Select, message, Modal } from "antd";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { Upload } from 'antd';
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 import ImgCrop from 'antd-img-crop';
@@ -51,27 +52,28 @@ export const FormItem = ({ onHandleItemRegister, onHandleItemUpdate, item, setIt
     const { control, handleSubmit, formState: { errors }, reset, setValue } = useForm<ItemRegisterForm>({
         resolver: zodResolver(ItemRegisterScheme),
     });
-    const [previewOpen, setPreviewOpen] = useState(false);
-    const [previewImage, setPreviewImage] = useState('');
-    const [previewTitle, setPreviewTitle] = useState('');
-    const [coverImage, setCoverImage] = useState<UploadFile[]>([]);
+    const [base64Image, setBase64Image] = useState<string | undefined>();
 
-    const handleChange: UploadProps['onChange'] = ({ fileList: newFileList }) => {
-        setCoverImage(newFileList);
-        setValue("coverImage", newFileList[0].thumbUrl?.toString() ?? "");
-    };
+    const imageChange = (e: ChangeEvent<HTMLInputElement>) => {
+        const files = e.target.files;
 
-    const handlePreview = async (file: UploadFile) => {
-        if (!file.url && !file.preview) {
-            file.preview = await getBase64(file.originFileObj as RcFile);
+        if (files && files.length > 0) {
+            const reader = new FileReader();
+            reader.onload = () => {
+                const base64 = reader.result as string;
+                setBase64Image(base64);
+                setValue("coverImage", base64);
+
+                console.log("BASE 64: ", base64);
+            };
+
+            reader.readAsDataURL(files[0]);
         }
-
-        setPreviewImage(file.url || (file.preview as string));
-        setPreviewOpen(true);
-        setPreviewTitle(file.name || file.url!.substring(file.url!.lastIndexOf('/') + 1));
     };
 
-    const handleCancel = () => setPreviewOpen(false);
+    const removeSelectedImage = () => {
+        setBase64Image(undefined);
+    };
 
     const currentYear = new Date().getFullYear();
     const endYear = 1950;
@@ -101,18 +103,11 @@ export const FormItem = ({ onHandleItemRegister, onHandleItemUpdate, item, setIt
             }
         } else {
             try {
-                if (coverImage) {
-                    const response = await api.post("item", { data: { ...data, coverImage: coverImage[0].thumbUrl } });
+                const response = await api.post("item", { data });
 
-                    if (response.status === 201) {
-                        reset();
-                        onHandleItemRegister(response.data.createdItem);
-                    }
-                } else {
-                    messageApi.open({
-                        type: 'warning',
-                        content: 'A imagem da capa é obrigatória.',
-                    });
+                if (response.status === 201) {
+                    reset();
+                    onHandleItemRegister(response.data.createdItem);
                 }
             } catch (error) {
                 messageApi.open({
@@ -287,34 +282,72 @@ export const FormItem = ({ onHandleItemRegister, onHandleItemUpdate, item, setIt
                                     )} />
                             </Form.Item>
                         </div>
+                        <div className="w-full">
+                            <Form.Item
+                                label="Sinopse"
+                                hasFeedback
+                                validateStatus={errors.synopsis ? 'error' : ''}
+                                help={errors.synopsis?.message}
+                                className="w-12/12"
+                            >
+                                <Controller
+                                    name="synopsis"
+                                    control={control}
+                                    render={({ field: { value, onChange, ...rest } }) => (
+                                        <Input.TextArea
+                                            placeholder="Digite a sinopse da obra"
+                                            size="large"
+                                            rows={5}
+                                            value={item?.synopsis ?? value ?? undefined}
+                                            onChange={(e) => {
+                                                if (setItem && item) {
+                                                    setItem((prevItem) => {
+                                                        if (prevItem) {
+                                                            return { ...prevItem, synopsis: e.target.value };
+                                                        }
+                                                        return null;
+                                                    });
+                                                }
+
+                                                onChange(e);
+                                            }}
+                                            {...rest}
+                                        />
+                                    )} />
+                            </Form.Item>
+                        </div>
                     </div>
                     <div className="flex flex-col w-3/12">
+                        {errors.root?.message}
                         <Form.Item
                             label="Imagem da Capa"
                             hasFeedback
                             validateStatus={errors.coverImage ? 'error' : ""}
                             help={errors.coverImage?.message}
                             className="w-12/12"
+                            getValueFromEvent={(event) => {
+                                return event?.fileList;
+                            }}
                         >
-                            <ImgCrop aspect={9 / 16} cropShape="rect" modalTitle="Cortar Imagem" modalOk="Confirmar Corte">
-                                <>
-                                    <Upload
-                                        accept=".jpg,.jpeg,.png"
-                                        listType="picture-card"
-                                        fileList={coverImage}
-                                        maxCount={1}
-                                        multiple={false}
-                                        name="coverImage"
-                                        onPreview={handlePreview}
-                                        onChange={handleChange}
-                                    >
-                                        {coverImage.length < 5 && 'Selecionar Imagem'}
-                                    </Upload>
-                                    <Modal open={previewOpen} title={previewTitle} footer={null} onCancel={handleCancel}>
-                                        <img alt="example" style={{ width: '100%' }} src={previewImage} />
-                                    </Modal>
-                                </>
-                            </ImgCrop>
+
+                            <>
+                                <input
+                                    accept="image/*"
+                                    type="file"
+                                    onChange={(e) => {
+                                        imageChange(e);
+                                    }}
+                                />
+                                {base64Image && (
+                                    <div className="flex justify-start items-start">
+                                        <img
+                                            src={base64Image}
+                                            className="mt-4 w-auto h-72"
+                                            alt="Thumb"
+                                        />
+                                    </div>
+                                )}
+                            </>
                         </Form.Item>
                     </div>
                 </div>

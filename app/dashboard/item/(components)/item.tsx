@@ -28,7 +28,7 @@ export default function Item({ data }: ItemProps) {
     const [messageApi, contextHolder] = message.useMessage();
     const [item, setItem] = useState<IItem | null>(null);
     const [items, setItems] = useState<IItem[]>(data ?? []);
-    const [formVisible, setFormVisible] = useState(false);
+    const [formVisible, setFormVisible] = useState(true);
     const [search, setSearch] = useState("");
 
     const handleItemRegister = (newItem: IItem) => {

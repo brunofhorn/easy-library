@@ -8,6 +8,8 @@ export async function POST(request: NextRequest) {
     try {
         const data = ItemRegisterScheme.parse(body.data);
 
+        console.log("DATA POST ITEM: ", data);
+
         const createdItem = await prisma.item.create({
             data: {
                 title: data.title,
@@ -25,8 +27,11 @@ export async function POST(request: NextRequest) {
             }
         });
 
+        console.log("CREATED: ", createdItem);
+
         return NextResponse.json({ createdItem }, { status: 201 });
     } catch (error: any) {
+        console.log("ERRO AO CRIAR OBRA: ", error);
         return NextResponse.json({ error: error.errors }, { status: 500 });
     }
 }
