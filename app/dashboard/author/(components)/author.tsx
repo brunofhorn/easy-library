@@ -5,6 +5,7 @@ import { Card, Divider, message } from "antd";
 import { IAuthor } from "@interfaces/common";
 import { api } from "@/lib/api";
 import FormAuthor from "./form";
+import ListAuthors from "./list";
 
 type AuthorProps = {
     data: IAuthor[];
@@ -78,7 +79,11 @@ export default function Author({ data }: AuthorProps) {
             </Card>
             <Divider />
             <Card className='min-h-full'>
-
+                <ListAuthors
+                    data={authors}
+                    onHandleDelete={handleAuthorDelete}
+                    onHandleEdit={handleAuthorEdit}
+                />
             </Card>
         </>
     );
