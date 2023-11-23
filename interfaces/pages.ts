@@ -1,5 +1,6 @@
 import { Dispatch, SetStateAction } from "react";
 import { IAuthor, IItem, IPublishingCompany, IReader } from "./common";
+import { ISelect } from "./components";
 
 export interface IFormAuthorPageProps {
     onHandleAuthorRegister: (newAuthor: IAuthor) => void;
@@ -43,4 +44,9 @@ export interface IListItem {
 export interface IItemView {
     item: IItem;
     onHandleDelete: (id: string) => void;
+    readers: ISelect[];
+}
+
+export interface IFormBorrow {
+    readers: ISelect[];
 }

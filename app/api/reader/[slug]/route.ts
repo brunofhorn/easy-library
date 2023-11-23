@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 export async function GET(request: NextRequest, { params }: { params: { slug: string; }; }) {
     const id = params.slug;
 
-    const user = await prisma.reader.findUnique({
+    const reader = await prisma.reader.findUnique({
         select: {
             id: true,
             name: true,
@@ -15,7 +15,7 @@ export async function GET(request: NextRequest, { params }: { params: { slug: st
         where: { id },
     });
 
-    return NextResponse.json({ user });
+    return NextResponse.json({ reader });
 }
 
 export async function PUT(request: NextRequest, { params }: { params: { slug: string; }; }) {
@@ -24,7 +24,7 @@ export async function PUT(request: NextRequest, { params }: { params: { slug: st
     const { reader } = body;
 
     try {
-        const updatedUser = await prisma.reader.update({
+        const updatedReader = await prisma.reader.update({
             data: {
                 name: reader.name,
                 username: reader.username,
@@ -34,7 +34,7 @@ export async function PUT(request: NextRequest, { params }: { params: { slug: st
             where: { id }
         });
 
-        return NextResponse.json({ updatedUser }, { status: 200 });
+        return NextResponse.json({ updatedReader }, { status: 200 });
     } catch (error: any) {
         return NextResponse.json({ error: error.errors }, { status: 500 });
     }
@@ -44,9 +44,9 @@ export async function DELETE(request: NextRequest, { params }: { params: { slug:
     const id = params.slug;
 
     try {
-        const deletedUser = await prisma.reader.delete({ where: { id } });
+        const deletedReader = await prisma.reader.delete({ where: { id } });
 
-        return NextResponse.json({ deletedUser }, { status: 200 });
+        return NextResponse.json({ deletedReader }, { status: 200 });
     } catch (error: any) {
         return NextResponse.json({ error: error.errors }, { status: 500 });
     }

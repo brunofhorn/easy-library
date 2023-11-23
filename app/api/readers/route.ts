@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
     try {
-        const users = await prisma.reader.findMany({
+        const readers = await prisma.reader.findMany({
             orderBy: {
                 name: "asc"
             },
@@ -59,7 +59,7 @@ export async function GET(request: NextRequest) {
             },
         });
 
-        return NextResponse.json({ users }, { status: 200 });
+        return NextResponse.json({ readers }, { status: 200 });
     } catch (error: any) {
         console.log(error);
         return NextResponse.json({ error: error.errors }, { status: 500 });

@@ -44,3 +44,8 @@ export interface ILogo {
 export interface ITitlePage {
     title?: string;
 }
+
+export interface ISelect {
+    label: string;
+    value: string;
+}

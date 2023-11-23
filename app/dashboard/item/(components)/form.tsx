@@ -1,13 +1,11 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
-import { Input, Button, Form, Select, message, Modal } from "antd";
+import { Input, Button, Form, Select, message } from "antd";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ChangeEvent, useEffect, useState } from "react";
-import { Upload } from 'antd';
-import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
-import ImgCrop from 'antd-img-crop';
+import type { RcFile } from 'antd/es/upload/interface';
 import { api } from "@/lib/api";
 import { IAuthor, IItemType, IPublishingCompany } from "@interfaces/common";
 import { IFormItemPageProps } from "@interfaces/pages";
