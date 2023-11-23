@@ -28,7 +28,7 @@ export default function Item({ data }: ItemProps) {
     const [messageApi, contextHolder] = message.useMessage();
     const [item, setItem] = useState<IItem | null>(null);
     const [items, setItems] = useState<IItem[]>(data ?? []);
-    const [formVisible, setFormVisible] = useState(true);
+    const [formVisible, setFormVisible] = useState(false);
     const [search, setSearch] = useState("");
 
     const handleItemRegister = (newItem: IItem) => {
@@ -109,7 +109,7 @@ export default function Item({ data }: ItemProps) {
                     </Button>
                 </div>
                 <div className="mt-5">
-                    <ListItems data={items} />
+                    <ListItems data={items} onHandleDelete={handleItemDelete} />
                 </div>
             </Card>
         </>

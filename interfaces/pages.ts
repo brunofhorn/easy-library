@@ -37,8 +37,10 @@ export interface ITable<T> {
 
 export interface IListItem {
     data: IItem[];
+    onHandleDelete: (id: string) => void;
 }
 
 export interface IItemView {
     item: IItem;
+    onHandleDelete: (id: string) => void;
 }
