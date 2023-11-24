@@ -12,7 +12,13 @@ export default function ListItems({ data, readers, onHandleDelete }: IListItem) 
                     <Image
                         width={200}
                         preview={{
-                            imageRender: () => <ItemView item={item} onHandleDelete={onHandleDelete} readers={readers} />,
+                            imageRender: () => (
+                                <ItemView
+                                    item={item}
+                                    onHandleDelete={onHandleDelete}
+                                    readers={readers}
+                                />
+                            ),
                             toolbarRender: () => null,
                         }}
                         src={item?.coverImage?.toString()}

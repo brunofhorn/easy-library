@@ -9,15 +9,26 @@ import Typography from "@/components/shared/typography";
 import { IFormBorrow } from "@interfaces/pages";
 import Iconify from "@/components/shared/iconify";
 import { api } from "@/lib/api";
+import { useState } from "react";
 
 export default function FormBorrow({ readers, itemId }: IFormBorrow) {
     const [messageApi, contextHolder] = message.useMessage();
-    const { control, handleSubmit, formState: { errors }, reset, setValue } = useForm<BorrowForm>({
+    const { control, handleSubmit, formState: { errors }, reset } = useForm<BorrowForm>({
         resolver: zodResolver(BorrowScheme),
         defaultValues: {
             itemId
         }
     });
+    const [isPreviewOpen, setPreviewOpen] = useState(true);
+
+    const closePreview = () => {
+        setPreviewOpen(false);
+    };
+
+    if (!isPreviewOpen) {
+        // Se o preview estiver fechado, retorne null ou qualquer coisa que indique que o componente não deve ser renderizado
+        return null;
+    }
 
     const onSubmit = async (data: BorrowForm) => {
         try {
@@ -25,6 +36,7 @@ export default function FormBorrow({ readers, itemId }: IFormBorrow) {
 
             if (response.status === 201) {
                 reset();
+                closePreview();
             }
         } catch (error) {
             messageApi.open({
@@ -107,6 +119,7 @@ export default function FormBorrow({ readers, itemId }: IFormBorrow) {
                     </Form.Item>
                 </div>
                 <div className="flex flex-row">
+                    <Button onClick={() => closePreview()}>FECHAR MODAL</Button>
                     <Button type="default" htmlType="submit" className="flex flex-row gap-2 justify-center items-center">
                         <Iconify icon={"cil:book"} />
                         <Typography variant="span">Realizar Empréstimo</Typography>
