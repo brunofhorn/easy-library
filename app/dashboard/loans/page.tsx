@@ -1,6 +1,6 @@
 import TitlePage from "@/components/layout/title-page";
 import { api } from "@/lib/api";
-import Loan from "./(components)/Loan";
+import Loan from "./(components)/loan";
 
 async function getLoans() {
     const { data } = await api.get("transactions");
