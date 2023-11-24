@@ -6,7 +6,6 @@ import Typography from "@/components/shared/typography";
 import { IAuthor } from "@interfaces/common";
 import { api } from "@/lib/api";
 import FormBorrow from "./form-borrow";
-import { useState } from "react";
 
 async function deleteItem(id: string) {
     const { data } = await api.delete(`item/${id}`);
@@ -14,7 +13,7 @@ async function deleteItem(id: string) {
     return data.items;
 }
 
-export default function ItemView({ item, onHandleDelete, readers, closePreview }: IItemView) {
+export default function ItemView({ item, onHandleDelete, readers }: IItemView) {
     const [messageApi, contextHolder] = message.useMessage();
 
     const handleDelete = async (id: string) => {
@@ -83,7 +82,7 @@ export default function ItemView({ item, onHandleDelete, readers, closePreview }
                         </Typography>
                     </div>
                     <Divider />
-                    <FormBorrow readers={readers} itemId={item.id} closePreview={closePreview} />
+                    <FormBorrow readers={readers} itemId={item.id} />
                 </div>
             </div>
         </>

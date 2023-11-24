@@ -9,9 +9,8 @@ import Typography from "@/components/shared/typography";
 import { IFormBorrow } from "@interfaces/pages";
 import Iconify from "@/components/shared/iconify";
 import { api } from "@/lib/api";
-import { useState } from "react";
 
-export default function FormBorrow({ readers, itemId, closePreview }: IFormBorrow) {
+export default function FormBorrow({ readers, itemId }: IFormBorrow) {
     const [messageApi, contextHolder] = message.useMessage();
     const { control, handleSubmit, formState: { errors }, reset } = useForm<BorrowForm>({
         resolver: zodResolver(BorrowScheme),
@@ -27,7 +26,6 @@ export default function FormBorrow({ readers, itemId, closePreview }: IFormBorro
 
             if (response.status === 201) {
                 reset();
-                closePreview();
             }
         } catch (error) {
             messageApi.open({
