@@ -42,10 +42,6 @@ export default function ItemView({ item, onHandleDelete, readers }: IItemView) {
                     />
                     <div className="flex flex-col gap-3">
                         <div className="flex flex-row gap-3">
-                            <Button className="w-full flex flex-row gap-1 items-center justify-center">
-                                <Iconify icon={"la:edit-solid"} />
-                                EDITAR
-                            </Button>
                             <Button onClick={() => handleDelete(item.id)} className="w-full flex flex-row gap-1 items-center justify-center">
                                 <Iconify icon={"iconoir:trash"} />
                                 EXCLUIR

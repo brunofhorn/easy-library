@@ -18,8 +18,11 @@ export async function POST(request: NextRequest) {
             }
         });
 
+        console.log(createdTransaction);
+
         return NextResponse.json({ createdTransaction }, { status: 201 });
     } catch (error: any) {
+        console.log("ERROR: ", error);
         return NextResponse.json({ error: error.errors }, { status: 500 });
     }
 }
