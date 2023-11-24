@@ -33,8 +33,8 @@ export interface IFormReaderPageProps {
 
 export interface ITable<T> {
     data: T[];
-    onHandleDelete: (id: string) => void;
-    onHandleEdit: (id: string) => void;
+    onHandleDelete?: (id: string) => void;
+    onHandleEdit?: (id: string) => void;
 }
 
 export interface IListItem {

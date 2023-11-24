@@ -9,6 +9,7 @@ import Typography from "@/components/shared/typography";
 import { IFormBorrow } from "@interfaces/pages";
 import Iconify from "@/components/shared/iconify";
 import { api } from "@/lib/api";
+import moment from "moment";
 
 export default function FormBorrow({ readers, itemId }: IFormBorrow) {
     const [messageApi, contextHolder] = message.useMessage();
@@ -22,7 +23,13 @@ export default function FormBorrow({ readers, itemId }: IFormBorrow) {
 
     const onSubmit = async (data: BorrowForm) => {
         try {
-            const response = await api.post("transaction", { data });
+            const response = await api.post("transaction", {
+                data: {
+                    ...data,
+                    date: moment(data.date, 'DD/MM/YYYY').format('YYYY-MM-DD 00:00:00'),
+                    returnDate: moment(data.returnDate, 'DD/MM/YYYY').format('YYYY-MM-DD 00:00:00')
+                }
+            });
 
             if (response.status === 201) {
                 reset();

@@ -46,6 +46,7 @@ export interface ITransaction {
     item: IItem;
     returnDate: string;
     transactionType: ITransactionType;
+    borrower: IReader;
 }
 
 export interface ITransactionType {
