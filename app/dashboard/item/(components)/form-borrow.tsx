@@ -11,7 +11,7 @@ import Iconify from "@/components/shared/iconify";
 import { api } from "@/lib/api";
 import { useState } from "react";
 
-export default function FormBorrow({ readers, itemId }: IFormBorrow) {
+export default function FormBorrow({ readers, itemId, closePreview }: IFormBorrow) {
     const [messageApi, contextHolder] = message.useMessage();
     const { control, handleSubmit, formState: { errors }, reset } = useForm<BorrowForm>({
         resolver: zodResolver(BorrowScheme),
@@ -19,20 +19,11 @@ export default function FormBorrow({ readers, itemId }: IFormBorrow) {
             itemId
         }
     });
-    const [isPreviewOpen, setPreviewOpen] = useState(true);
 
-    const closePreview = () => {
-        setPreviewOpen(false);
-    };
-
-    if (!isPreviewOpen) {
-        // Se o preview estiver fechado, retorne null ou qualquer coisa que indique que o componente não deve ser renderizado
-        return null;
-    }
 
     const onSubmit = async (data: BorrowForm) => {
         try {
-            const response = await api.post("item", { data });
+            const response = await api.post("transaction", { data });
 
             if (response.status === 201) {
                 reset();
@@ -41,7 +32,7 @@ export default function FormBorrow({ readers, itemId }: IFormBorrow) {
         } catch (error) {
             messageApi.open({
                 type: 'error',
-                content: 'Ocorreu um erro ao tentar cadastrar a obra.',
+                content: 'Ocorreu um erro ao tentar realizar o empréstimo.',
             });
         }
     };
@@ -119,7 +110,6 @@ export default function FormBorrow({ readers, itemId }: IFormBorrow) {
                     </Form.Item>
                 </div>
                 <div className="flex flex-row">
-                    <Button onClick={() => closePreview()}>FECHAR MODAL</Button>
                     <Button type="default" htmlType="submit" className="flex flex-row gap-2 justify-center items-center">
                         <Iconify icon={"cil:book"} />
                         <Typography variant="span">Realizar Empréstimo</Typography>

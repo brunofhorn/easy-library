@@ -47,9 +47,11 @@ export interface IItemView {
     item: IItem;
     onHandleDelete: (id: string) => void;
     readers: ISelect[];
+    closePreview: () => void;
 }
 
 export interface IFormBorrow {
     readers: ISelect[];
     itemId: string;
+    closePreview: () => void;
 }

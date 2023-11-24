@@ -14,7 +14,7 @@ export async function POST(request: NextRequest) {
                 returnDate: data.returnDate,
                 itemId: data.itemId,
                 borrowerId: data.borrower,
-                transactionTypeId: ""
+                transactionTypeId: "clpbynmm50004xjh4q5lla9j2"
             }
         });
 

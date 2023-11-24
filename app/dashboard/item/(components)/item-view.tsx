@@ -6,6 +6,7 @@ import Typography from "@/components/shared/typography";
 import { IAuthor } from "@interfaces/common";
 import { api } from "@/lib/api";
 import FormBorrow from "./form-borrow";
+import { useState } from "react";
 
 async function deleteItem(id: string) {
     const { data } = await api.delete(`item/${id}`);
@@ -13,7 +14,7 @@ async function deleteItem(id: string) {
     return data.items;
 }
 
-export default function ItemView({ item, onHandleDelete, readers }: IItemView) {
+export default function ItemView({ item, onHandleDelete, readers, closePreview }: IItemView) {
     const [messageApi, contextHolder] = message.useMessage();
 
     const handleDelete = async (id: string) => {
@@ -54,34 +55,35 @@ export default function ItemView({ item, onHandleDelete, readers }: IItemView) {
                     </div>
                 </div>
                 <div className="flex flex-1 flex-col justify-start items-start">
-                    <Typography variant="h4">{item.title}</Typography>
+                    <Typography variant="h6" className="text-left">{item.title}</Typography>
                     <div className="flex flex-row w-full">
                         <div className="flex flex-row gap-1 w-1/2 justify-start items-center">
                             <Typography variant="span">Categoria:</Typography>
-                            <Typography variant="span" className="p-2">{item.itemType.description}</Typography>
+                            <Typography variant="span" className="font-bold">{item.itemType.description}</Typography>
                         </div>
                         <div className="flex flex-row gap-1 w-1/2 justify-start items-center">
                             <Typography variant="span">Editora:</Typography>
-                            <Typography variant="span">{item.publishingCompany.name}</Typography>
+                            <Typography variant="span" className="font-bold">{item.publishingCompany.name}</Typography>
                         </div>
                     </div>
                     <div className="flex flex-row w-full mb-3">
                         <div className="flex flex-row gap-1 w-1/2 justify-start items-center">
                             <Typography variant="span">Autor(es):</Typography>
                             {item.authors.map((author: IAuthor) => (
-                                <Typography key={author.id} variant="span">{author.name}
-                                </Typography>
+                                <Typography key={author.id} variant="span" className="font-bold">{author.name}</Typography>
                             ))}
                         </div>
                     </div>
                     <Typography variant="span">
                         Sinopse:
                     </Typography>
-                    <Typography variant="span" className="text-justify">
-                        {item.synopsis?.length > 1200 ? `${item.synopsis.substring(0, 1140)}...` : item.synopsis}
-                    </Typography>
+                    <div className="max-h-36 overflow-auto text-justify pr-1">
+                        <Typography variant="span">
+                            {item.synopsis?.length > 1200 ? `${item.synopsis.substring(0, 1140)}...` : item.synopsis}
+                        </Typography>
+                    </div>
                     <Divider />
-                    <FormBorrow readers={readers} itemId={item.id} />
+                    <FormBorrow readers={readers} itemId={item.id} closePreview={closePreview} />
                 </div>
             </div>
         </>
