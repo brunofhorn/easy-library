@@ -3,8 +3,12 @@ import { api } from "@/lib/api";
 import Author from "./(components)/author";
 
 async function getAuthors() {
-    const { data } = await api.get("authors");
-    return data.authors;
+    try {
+        const { data } = await api.get("authors");
+        return data.authors;
+    } catch (error) {
+        return [];
+    }
 }
 
 export default async function AuthorPage() {
