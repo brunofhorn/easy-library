@@ -4,7 +4,8 @@ export const BorrowScheme = z.object({
     date: z.string({ required_error: "A data de início é obrigatória." }),
     returnDate: z.string({ required_error: "A data de início é obrigatória." }),
     borrower: z.string({ required_error: "O leitor é obrigatório." }),
-    itemId: z.string({ required_error: "O item é obrigatório" })
+    itemId: z.string({ required_error: "O item é obrigatório" }),
+    transactionType: z.string({ required_error: "O tipo de transação é obrigatório." })
 });
 
 export type BorrowForm = z.infer<typeof BorrowScheme>;

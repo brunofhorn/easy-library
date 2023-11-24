@@ -16,7 +16,8 @@ export default function FormBorrow({ readers, itemId }: IFormBorrow) {
     const { control, handleSubmit, formState: { errors }, reset } = useForm<BorrowForm>({
         resolver: zodResolver(BorrowScheme),
         defaultValues: {
-            itemId
+            itemId,
+            transactionType: "empréstimo"
         }
     });
 

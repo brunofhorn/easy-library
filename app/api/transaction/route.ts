@@ -8,13 +8,22 @@ export async function POST(request: NextRequest) {
     try {
         const data = BorrowScheme.parse(body.data);
 
+        const transactionType = await prisma.transactionType.findMany({
+            where: {
+                description: {
+                    equals: "empréstimo",
+                    mode: "insensitive"
+                }
+            }
+        });
+
         const createdTransaction = await prisma.transaction.create({
             data: {
                 date: new Date(data.date),
                 returnDate: new Date(data.returnDate),
                 itemId: data.itemId,
                 borrowerId: data.borrower,
-                transactionTypeId: "clpbynmm50004xjh4q5lla9j2"
+                transactionTypeId: transactionType[0].id ?? ""
             }
         });
 

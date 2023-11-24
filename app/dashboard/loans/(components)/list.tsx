@@ -6,6 +6,7 @@ import { ITable } from "@interfaces/pages";
 import { Button, Input, InputRef, Modal, Skeleton, Space, Table, message } from "antd";
 import { ColumnType, ColumnsType } from "antd/es/table";
 import { FilterConfirmProps } from "antd/es/table/interface";
+import moment from "moment";
 import { Suspense, useRef, useState } from "react";
 
 type DataIndex = keyof ITransaction;
@@ -18,20 +19,12 @@ export default function ListLoans({ data }: ITable<ITransaction>) {
     const searchInput = useRef<InputRef>(null);
     const dataSourceWithKey = data.map(item => ({
         ...item,
+        borrowerName: item.borrower.name,
+        title: item.item.title,
+        date: moment(item.date, "YYYY-MM-DD 00:00:00").format("DD/MM/YYYY"),
+        returnDate: moment(item.returnDate, "YYYY-MM-DD 00:00:00").format("DD/MM/YYYY"),
         key: item.id,
     }));
-    const filterNationality: { key: string; text: string; value: string; }[] = data
-        .reduce<{ key: string; text: string; value: string; }[]>(
-            (author, { id, item }) => {
-                const exists = author.find((i) => i.text === item.title);
-                if (!exists) {
-                    author.push({ key: id, text: item.title, value: item.id });
-                }
-                return author;
-            },
-            []
-        )
-        .sort((a, b) => a.text.localeCompare(b.text));
 
     const getColumnSearchProps = (dataIndex: DataIndex): ColumnType<ITransaction> => ({
         filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters, close }) => (
@@ -109,19 +102,25 @@ export default function ListLoans({ data }: ITable<ITransaction>) {
     const columns: ColumnsType<ITransaction> = [
         {
             title: 'Nome do Leitor',
-            dataIndex: 'borrower.name',
-            key: 'borrower.name',
-            width: '70%',
+            dataIndex: 'borrowerName',
+            key: 'borrowerName',
+            width: '50%',
             ...getColumnSearchProps("borrower"),
         },
         {
-            title: 'Nacionalidade',
-            dataIndex: 'nationality',
-            key: 'nationality',
-            width: '30%',
-            // filters: [...filterNationality],
-            // onFilter: (value, record: IAuthor) => record.nationality.startsWith(value.toString()),
-            // filterSearch: true,
+            title: 'Obra',
+            dataIndex: 'title',
+            key: 'title',
+        },
+        {
+            title: 'Empréstimo',
+            dataIndex: 'date',
+            key: 'date',
+        },
+        {
+            title: 'Devolução',
+            dataIndex: 'returnDate',
+            key: 'returnDate',
         },
     ];
 
