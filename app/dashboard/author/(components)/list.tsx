@@ -179,7 +179,9 @@ export default function ListAuthors({ data, onHandleDelete, onHandleEdit }: ITab
         const response = await api.delete(`author/${id}`);
 
         if (response.status === 200) {
-            onHandleDelete(id);
+            if (onHandleDelete) {
+                onHandleDelete(id);
+            }
         } else {
             messageApi.open({
                 type: "error",
@@ -189,7 +191,9 @@ export default function ListAuthors({ data, onHandleDelete, onHandleEdit }: ITab
     };
 
     const handleEditAuthor = (authorId: string) => {
-        onHandleEdit(authorId);
+        if (onHandleEdit) {
+            onHandleEdit(authorId);
+        }
     };
 
     return (
