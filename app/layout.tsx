@@ -2,7 +2,6 @@ import "./globals.css";
 import { Analytics } from "@vercel/analytics/react";
 import cx from "classnames";
 import { sfPro, inter } from "./fonts";
-import { Suspense } from "react";
 
 export const metadata = {
   title: 'Easy Educa Library',

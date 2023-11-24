@@ -20,18 +20,18 @@ export async function GET(request: NextRequest) {
                         id: filter ? { equals: filter } : undefined,
                     },
                     {
-                        title: filter ? { contains: filter } : undefined,
+                        title: filter ? { contains: filter, mode: "insensitive" } : undefined,
                     },
                     {
                         authors: {
                             some: {
-                                name: filter ? { contains: filter } : undefined
+                                name: filter ? { contains: filter, mode: "insensitive" } : undefined
                             }
                         },
                     },
                     {
                         publishingCompany: {
-                            name: filter ? { contains: filter } : undefined
+                            name: filter ? { contains: filter, mode: "insensitive" } : undefined
                         }
                     }
                 ]
