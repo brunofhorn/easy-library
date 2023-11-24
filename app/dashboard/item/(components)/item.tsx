@@ -1,6 +1,7 @@
 "use client";
 
 import { api } from "@/lib/api";
+import { ISelect } from "@interfaces/components";
 import { IItem } from "@interfaces/common";
 import { Button, Card, Divider, Input, message } from "antd";
 import { useState } from "react";
@@ -11,20 +12,10 @@ import ListItems from "./list";
 
 type ItemProps = {
     data: IItem[];
+    readers: ISelect[];
 };
 
-async function getItem(id: string) {
-    const { data } = await api.get(`item/${id}`);
-    return data.item;
-}
-
-async function getItemsFiltered(filter: string) {
-    const { data } = await api.get(`items?filter=${filter}`);
-
-    return data.items;
-}
-
-export default function Item({ data }: ItemProps) {
+export default function Item({ data, readers }: ItemProps) {
     const [messageApi, contextHolder] = message.useMessage();
     const [item, setItem] = useState<IItem | null>(null);
     const [items, setItems] = useState<IItem[]>(data ?? []);
@@ -71,15 +62,15 @@ export default function Item({ data }: ItemProps) {
     };
 
     const handleItemEdit = async (id: string) => {
-        const itemSelected = await getItem(id);
+        const { data } = await api.get(`item/${id}`);
 
-        setItem(itemSelected);
+        setItem(data.item);
     };
 
     const handleSearch = async (value: string) => {
-        const filteredItems = await getItemsFiltered(value);
+        const { data } = await api.get(`items?filter=${value}`);
 
-        setItems(filteredItems);
+        setItems(data.items);
     };
 
     return (
@@ -109,7 +100,7 @@ export default function Item({ data }: ItemProps) {
                     </Button>
                 </div>
                 <div className="mt-5">
-                    <ListItems data={items} onHandleDelete={handleItemDelete} />
+                    <ListItems data={items} onHandleDelete={handleItemDelete} readers={readers} />
                 </div>
             </Card>
         </>

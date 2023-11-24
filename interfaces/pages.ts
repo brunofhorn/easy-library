@@ -38,6 +38,7 @@ export interface ITable<T> {
 
 export interface IListItem {
     data: IItem[];
+    readers: ISelect[];
     onHandleDelete: (id: string) => void;
 }
 

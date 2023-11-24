@@ -1,20 +1,8 @@
 import { IListItem } from "@interfaces/pages";
 import { Image, List } from "antd";
 import ItemView from "./item-view";
-import { api } from "@/lib/api";
-import { IReader } from "@interfaces/common";
 
-async function getReaders() {
-    const { data } = await api.get(`readers`);
-
-    return data?.readers?.map((reader: IReader) => {
-        return { key: reader.id, label: reader.name, value: reader.id };
-    });
-}
-
-export default async function ListItems({ data, onHandleDelete }: IListItem) {
-    const readers = await getReaders();
-
+export default function ListItems({ data, readers, onHandleDelete }: IListItem) {
     return (
         <List
             grid={{ gutter: 0, column: 6 }}
