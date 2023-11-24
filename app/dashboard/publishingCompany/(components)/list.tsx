@@ -156,7 +156,9 @@ export const ListPublishingCompanies = ({ data, onHandleDelete, onHandleEdit }: 
         const response = await api.delete(`publishingCompany/${id}`);
 
         if (response.status === 200) {
-            onHandleDelete(id);
+            if (onHandleDelete) {
+                onHandleDelete(id);
+            }
         } else {
             messageApi.open({
                 type: "error",
@@ -166,7 +168,9 @@ export const ListPublishingCompanies = ({ data, onHandleDelete, onHandleEdit }: 
     };
 
     const handleEditPublishingCompany = (publishingCompanyId: string) => {
-        onHandleEdit(publishingCompanyId);
+        if (onHandleEdit) {
+            onHandleEdit(publishingCompanyId);
+        }
     };
 
     return (

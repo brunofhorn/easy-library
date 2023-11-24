@@ -170,7 +170,9 @@ export const ListReaders = ({ data, onHandleDelete, onHandleEdit }: ITable<IRead
         const response = await api.delete(`reader/${id}`);
 
         if (response.status === 200) {
-            onHandleDelete(id);
+            if (onHandleDelete) {
+                onHandleDelete(id);
+            }
         } else {
             messageApi.open({
                 type: "error",
@@ -180,7 +182,9 @@ export const ListReaders = ({ data, onHandleDelete, onHandleEdit }: ITable<IRead
     };
 
     const handleEditReader = (readerId: string) => {
-        onHandleEdit(readerId);
+        if (onHandleEdit) {
+            onHandleEdit(readerId);
+        }
     };
 
     return (
