@@ -54,6 +54,10 @@ export default function FormAuthor({ onHandleAuthorRegister, onHandleAuthorUpdat
         }
     };
 
+    const filterOption = (input: string, option?: { label: string; value: string; }) => {
+        return (option?.label ?? '').toLowerCase().includes(input.toLowerCase());
+    };
+
 
     return (
         <>
@@ -106,6 +110,9 @@ export default function FormAuthor({ onHandleAuthorRegister, onHandleAuthorUpdat
                                     placeholder="Selecione a nacionalidade"
                                     options={nationalities}
                                     size="large"
+                                    showSearch
+                                    optionFilterProp="children"
+                                    filterOption={filterOption}
                                     value={author ? author?.nationality : value ? value : undefined}
                                     onChange={(selectedValue) => {
                                         onChange(selectedValue);

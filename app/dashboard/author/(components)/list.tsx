@@ -4,6 +4,7 @@ import Iconify from "@/components/shared/iconify";
 import { api } from "@/lib/api";
 import { IAuthor } from "@interfaces/common";
 import { ITable } from "@interfaces/pages";
+import { getNationality } from "@services/getNationality";
 import { Button, Input, InputRef, Modal, Skeleton, Space, Table, message } from "antd";
 import { ColumnType, ColumnsType } from "antd/es/table";
 import { FilterConfirmProps } from "antd/es/table/interface";
@@ -20,13 +21,14 @@ export default function ListAuthors({ data, onHandleDelete, onHandleEdit }: ITab
     const dataSourceWithKey = data.map(item => ({
         ...item,
         key: item.id,
+        nationality: getNationality(item.nationality),
     }));
     const filterNationality: { key: string; text: string; value: string; }[] = data
         .reduce<{ key: string; text: string; value: string; }[]>(
             (author, { id, nationality }) => {
-                const exists = author.find((item) => item.text === nationality);
+                const exists = author.find((item) => item.text === getNationality(nationality));
                 if (!exists) {
-                    author.push({ key: id, text: nationality, value: nationality });
+                    author.push({ key: id, text: getNationality(nationality), value: nationality });
                 }
                 return author;
             },
