@@ -82,6 +82,7 @@ export default function Item({ data, readers }: ItemProps) {
                     onHandleItemUpdate={handleItemUpdate}
                     item={item}
                     setItem={setItem}
+                    setFormVisible={setFormVisible}
                 />
             </Card>
             {formVisible && <Divider />}

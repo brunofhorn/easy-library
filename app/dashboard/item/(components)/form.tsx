@@ -33,7 +33,7 @@ async function getPublishingCompanies() {
     });
 }
 
-export const FormItem = ({ onHandleItemRegister, onHandleItemUpdate, item, setItem }: IFormItemPageProps) => {
+export const FormItem = ({ onHandleItemRegister, onHandleItemUpdate, item, setItem, setFormVisible }: IFormItemPageProps) => {
     const [messageApi, contextHolder] = message.useMessage();
     const [listAuthors, setListAuthors] = useState([]);
     const [listItemTypes, setListItemTypes] = useState([]);
@@ -102,9 +102,7 @@ export const FormItem = ({ onHandleItemRegister, onHandleItemUpdate, item, setIt
     };
 
     const onCancel = () => {
-        if (setItem) {
-            setItem((prevItem) => null);
-        }
+        setFormVisible(false);
     };
 
     const getListAuthors = async () => {
@@ -127,6 +125,10 @@ export const FormItem = ({ onHandleItemRegister, onHandleItemUpdate, item, setIt
         getListTypes();
         getListPublishingCompanies();
     }, []);
+
+    const filterOption = (input: string, option?: { label: string; value: string; }) => {
+        return (option?.label ?? '').toLowerCase().includes(input.toLowerCase());
+    };
 
 
     return (
@@ -182,6 +184,9 @@ export const FormItem = ({ onHandleItemRegister, onHandleItemUpdate, item, setIt
                                             placeholder="Selecione o Autor"
                                             options={listAuthors}
                                             size="large"
+                                            showSearch
+                                            optionFilterProp="children"
+                                            filterOption={filterOption}
                                             {...field}
                                         />
                                     )} />
@@ -203,6 +208,9 @@ export const FormItem = ({ onHandleItemRegister, onHandleItemUpdate, item, setIt
                                             placeholder="Selecione o ano"
                                             options={publicationYears}
                                             size="large"
+                                            showSearch
+                                            optionFilterProp="children"
+                                            filterOption={filterOption}
                                             {...field}
                                         />
                                     )} />
@@ -238,6 +246,9 @@ export const FormItem = ({ onHandleItemRegister, onHandleItemUpdate, item, setIt
                                     control={control}
                                     render={({ field }) => (
                                         <Select
+                                            showSearch
+                                            optionFilterProp="children"
+                                            filterOption={filterOption}
                                             placeholder="Selecione a editora"
                                             options={listPublishingCompanies}
                                             size="large"
@@ -319,6 +330,11 @@ export const FormItem = ({ onHandleItemRegister, onHandleItemUpdate, item, setIt
                                     onChange={(e) => {
                                         imageChange(e);
                                     }}
+                                    className="block w-full text-sm text-slate-500
+                                    file:mr-4 file:py-2 file:px-4 file:rounded-md
+                                    file:border-0 file:text-sm file:font-semibold
+                                    file:bg-blue-50 file:text-blue-700
+                                    hover:file:bg-blue-100"
                                 />
                                 {base64Image && (
                                     <div className="flex justify-start items-start">
@@ -341,14 +357,12 @@ export const FormItem = ({ onHandleItemRegister, onHandleItemUpdate, item, setIt
                             <Typography variant="span">{item?.id ? "Salvar Alteração" : "Cadastrar Obra"}</Typography>
                         </Button>
                     </Form.Item>
-                    {item?.id && (
-                        <Form.Item className="flex flex-row gap-2">
-                            <Button type="default" htmlType="button" onClick={() => onCancel()} className="flex flex-row gap-2 items-center justify-center">
-                                <Iconify icon={"iconoir:cancel"} />
-                                <Typography variant="span">Cancelar Edição</Typography>
-                            </Button>
-                        </Form.Item>
-                    )}
+                    <Form.Item className="flex flex-row gap-2">
+                        <Button type="default" htmlType="button" onClick={() => onCancel()} className="flex flex-row gap-2 items-center justify-center">
+                            <Iconify icon={"iconoir:cancel"} />
+                            <Typography variant="span">Cancelar</Typography>
+                        </Button>
+                    </Form.Item>
                 </div>
             </Form>
         </>

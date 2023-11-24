@@ -21,6 +21,7 @@ export interface IFormItemPageProps {
     onHandleItemUpdate: (item: IItem) => void;
     item?: IItem | null;
     setItem?: Dispatch<SetStateAction<IItem | null>> | undefined;
+    setFormVisible: (formVisible: boolean) => void;
 }
 
 export interface IFormReaderPageProps {
