@@ -5,7 +5,6 @@ import { Input, Button, Form, Select, message } from "antd";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ChangeEvent, useEffect, useState } from "react";
-import type { RcFile } from 'antd/es/upload/interface';
 import { api } from "@/lib/api";
 import { IAuthor, IItemType, IPublishingCompany } from "@interfaces/common";
 import { IFormItemPageProps } from "@interfaces/pages";
@@ -34,14 +33,6 @@ async function getPublishingCompanies() {
     });
 }
 
-const getBase64 = (file: RcFile): Promise<string> =>
-    new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = () => resolve(reader.result as string);
-        reader.onerror = (error) => reject(error);
-    });
-
 export const FormItem = ({ onHandleItemRegister, onHandleItemUpdate, item, setItem }: IFormItemPageProps) => {
     const [messageApi, contextHolder] = message.useMessage();
     const [listAuthors, setListAuthors] = useState([]);
@@ -61,16 +52,10 @@ export const FormItem = ({ onHandleItemRegister, onHandleItemUpdate, item, setIt
                 const base64 = reader.result as string;
                 setBase64Image(base64);
                 setValue("coverImage", base64);
-
-                console.log("BASE 64: ", base64);
             };
 
             reader.readAsDataURL(files[0]);
         }
-    };
-
-    const removeSelectedImage = () => {
-        setBase64Image(undefined);
     };
 
     const currentYear = new Date().getFullYear();

@@ -81,7 +81,7 @@ export default function ItemView({ item, onHandleDelete, readers }: IItemView) {
                         {item.synopsis?.length > 1200 ? `${item.synopsis.substring(0, 1140)}...` : item.synopsis}
                     </Typography>
                     <Divider />
-                    <FormBorrow readers={readers} />
+                    <FormBorrow readers={readers} itemId={item.id} />
                 </div>
             </div>
         </>

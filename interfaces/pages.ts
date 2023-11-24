@@ -50,4 +50,5 @@ export interface IItemView {
 
 export interface IFormBorrow {
     readers: ISelect[];
+    itemId: string;
 }

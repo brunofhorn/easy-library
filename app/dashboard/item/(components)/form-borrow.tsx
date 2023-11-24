@@ -2,91 +2,117 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { BorrowForm, BorrowScheme } from "@services/validations/borrow.scheme";
-import { DatePicker, Form, Select } from "antd";
+import { Button, DatePicker, Form, Select, message } from "antd";
 import { Controller, useForm } from "react-hook-form";
 import locale from 'antd/lib/date-picker/locale/pt_BR';
 import Typography from "@/components/shared/typography";
 import { IFormBorrow } from "@interfaces/pages";
+import Iconify from "@/components/shared/iconify";
+import { api } from "@/lib/api";
 
-export default function FormBorrow({ readers }: IFormBorrow) {
+export default function FormBorrow({ readers, itemId }: IFormBorrow) {
+    const [messageApi, contextHolder] = message.useMessage();
     const { control, handleSubmit, formState: { errors }, reset, setValue } = useForm<BorrowForm>({
         resolver: zodResolver(BorrowScheme),
+        defaultValues: {
+            itemId
+        }
     });
 
     const onSubmit = async (data: BorrowForm) => {
-        console.log(data);
+        try {
+            const response = await api.post("item", { data });
+
+            if (response.status === 201) {
+                reset();
+            }
+        } catch (error) {
+            messageApi.open({
+                type: 'error',
+                content: 'Ocorreu um erro ao tentar cadastrar a obra.',
+            });
+        }
     };
 
     return (
-        <Form onFinish={handleSubmit(onSubmit)} layout="vertical">
-            <div className="flex flex-row justify-between gap-4">
-                <Form.Item
-                    label={<Typography variant="span" className="text-xs">Data de Empréstimo</Typography>}
-                    hasFeedback
-                    validateStatus={errors.date ? 'error' : ''}
-                    help={errors.date?.message}
-                >
-                    <Controller
-                        name="date"
-                        control={control}
-                        render={({ field: { value, onChange, ...rest } }) => (
-                            <DatePicker
-                                placeholder="Empréstimo"
-                                value={undefined}
-                                size="middle"
-                                className="w-full"
-                                locale={locale}
-                                format={['DD/MM/YYYY', 'DD/MM/YY', 'DD-MM-YYYY', 'DD-MM-YY', 'YYYY-MM-DD']}
-                                onChange={(date, dateString: string) => {
-                                    onChange(dateString);
-                                }}
-                                {...rest}
-                            />
-                        )} />
-                </Form.Item>
-                <Form.Item
-                    label={<Typography variant="span" className="text-xs">Data de Devolução</Typography>}
-                    hasFeedback
-                    validateStatus={errors.returnDate ? 'error' : ''}
-                    help={errors.returnDate?.message}
-                >
-                    <Controller
-                        name="returnDate"
-                        control={control}
-                        render={({ field: { value, onChange, ...rest } }) => (
-                            <DatePicker
-                                placeholder="Devolução"
-                                value={undefined}
-                                size="middle"
-                                className="w-full"
-                                locale={locale}
-                                format={['DD/MM/YYYY', 'DD/MM/YY', 'DD-MM-YYYY', 'DD-MM-YY', 'YYYY-MM-DD']}
-                                onChange={(date, dateString: string) => {
-                                    onChange(dateString);
-                                }}
-                                {...rest}
-                            />
-                        )} />
-                </Form.Item>
-                <Form.Item
-                    label={<Typography variant="span" className="text-xs">Leitor</Typography>}
-                    hasFeedback
-                    validateStatus={errors.borrower ? 'error' : ""}
-                    help={errors.borrower?.message}
-                >
-                    <Controller
-                        name="borrower"
-                        control={control}
-                        render={({ field }) => (
-                            <Select
-                                placeholder="Selecione o Leitor"
-                                options={readers}
-                                size="middle"
-                                {...field}
-                            />
-                        )} />
-                </Form.Item>
-            </div>
-        </Form>
+        <>
+            {contextHolder}
+            <Form onFinish={handleSubmit(onSubmit)} layout="vertical">
+                <div className="flex flex-row justify-between gap-4">
+                    <Form.Item
+                        label={<Typography variant="span" className="text-xs">Data de Empréstimo</Typography>}
+                        hasFeedback
+                        validateStatus={errors.date ? 'error' : ''}
+                        help={errors.date?.message}
+                    >
+                        <Controller
+                            name="date"
+                            control={control}
+                            render={({ field: { value, onChange, ...rest } }) => (
+                                <DatePicker
+                                    placeholder="Empréstimo"
+                                    value={undefined}
+                                    size="middle"
+                                    className="w-full"
+                                    locale={locale}
+                                    format={['DD/MM/YYYY', 'DD/MM/YY', 'DD-MM-YYYY', 'DD-MM-YY', 'YYYY-MM-DD']}
+                                    onChange={(date, dateString: string) => {
+                                        onChange(dateString);
+                                    }}
+                                    {...rest}
+                                />
+                            )} />
+                    </Form.Item>
+                    <Form.Item
+                        label={<Typography variant="span" className="text-xs">Data de Devolução</Typography>}
+                        hasFeedback
+                        validateStatus={errors.returnDate ? 'error' : ''}
+                        help={errors.returnDate?.message}
+                    >
+                        <Controller
+                            name="returnDate"
+                            control={control}
+                            render={({ field: { value, onChange, ...rest } }) => (
+                                <DatePicker
+                                    placeholder="Devolução"
+                                    value={undefined}
+                                    size="middle"
+                                    className="w-full"
+                                    locale={locale}
+                                    format={['DD/MM/YYYY', 'DD/MM/YY', 'DD-MM-YYYY', 'DD-MM-YY', 'YYYY-MM-DD']}
+                                    onChange={(date, dateString: string) => {
+                                        onChange(dateString);
+                                    }}
+                                    {...rest}
+                                />
+                            )} />
+                    </Form.Item>
+                    <Form.Item
+                        label={<Typography variant="span" className="text-xs">Leitor</Typography>}
+                        hasFeedback
+                        validateStatus={errors.borrower ? 'error' : ""}
+                        help={errors.borrower?.message}
+                    >
+                        <Controller
+                            name="borrower"
+                            control={control}
+                            render={({ field }) => (
+                                <Select
+                                    placeholder="Selecione o Leitor"
+                                    options={readers}
+                                    size="middle"
+                                    {...field}
+                                />
+                            )} />
+                    </Form.Item>
+                </div>
+                <div className="flex flex-row">
+                    <Button type="default" htmlType="submit" className="flex flex-row gap-2 justify-center items-center">
+                        <Iconify icon={"cil:book"} />
+                        <Typography variant="span">Realizar Empréstimo</Typography>
+                    </Button>
+                </div>
+            </Form>
+        </>
     );
 }
