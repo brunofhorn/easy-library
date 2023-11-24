@@ -1,7 +1,7 @@
 "use client";
 
 import Iconify from "@/components/shared/iconify";
-import { IAuthor, ITransaction } from "@interfaces/common";
+import { ITransaction } from "@interfaces/common";
 import { ITable } from "@interfaces/pages";
 import { Button, Input, InputRef, Modal, Skeleton, Space, Table, message } from "antd";
 import { ColumnType, ColumnsType } from "antd/es/table";
