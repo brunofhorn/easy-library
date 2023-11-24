@@ -2,13 +2,17 @@ import { NextRequest, NextResponse } from "next/server";
 import prisma from '@/lib/prisma';
 
 export async function GET(request: NextRequest, { params }: { params: { slug: string; }; }) {
-    const id = params.slug;
+    try {
+        const id = params.slug;
 
-    const author = await prisma.author.findUnique({
-        where: { id },
-    });
+        const author = await prisma.author.findUnique({
+            where: { id },
+        });
 
-    return NextResponse.json({ author });
+        return NextResponse.json({ author }, { status: 200 });
+    } catch (error) {
+        return NextResponse.json({ author: null }, { status: 500 });
+    }
 }
 
 export async function PUT(request: NextRequest, { params }: { params: { slug: string; }; }) {
