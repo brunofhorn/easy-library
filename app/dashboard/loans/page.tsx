@@ -3,9 +3,13 @@ import { api } from "@/lib/api";
 import Loan from "./(components)/loan";
 
 async function getLoans() {
-    const { data } = await api.get("transactions");
+    try {
+        const { data } = await api.get("transactions");
 
-    return data.loans;
+        return data.loans;
+    } catch (error) {
+        return [];
+    }
 }
 
 export default async function LoanPage() {

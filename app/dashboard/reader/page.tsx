@@ -3,9 +3,13 @@ import { api } from "@/lib/api";
 import Reader from "./(components)/reader";
 
 async function getReaders() {
-    const { data } = await api.get("readers");
+    try {
+        const { data } = await api.get("readers");
 
-    return data.readers;
+        return data.readers;
+    } catch (error) {
+        return [];
+    }
 }
 
 export default async function ReaderPage() {

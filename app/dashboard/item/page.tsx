@@ -4,17 +4,25 @@ import Item from "./(components)/item";
 import { IReader } from "@interfaces/common";
 
 async function getItems() {
-    const { data } = await api.get("items?take=10");
+    try {
+        const { data } = await api.get("items?take=10");
 
-    return data.items;
+        return data.items;
+    } catch (error) {
+        return [];
+    }
 }
 
 async function getReaders() {
-    const { data } = await api.get(`readers`);
+    try {
+        const { data } = await api.get(`readers`);
 
-    return data?.readers?.map((reader: IReader) => {
-        return { key: reader.id, label: reader.name, value: reader.id };
-    });
+        return data?.readers?.map((reader: IReader) => {
+            return { key: reader.id, label: reader.name, value: reader.id };
+        });
+    } catch (error) {
+        return [];
+    }
 }
 
 
