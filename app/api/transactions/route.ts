@@ -32,7 +32,5 @@ export async function GET(request: NextRequest) {
         },
     });
 
-    console.log(loans);
-
-    return NextResponse.json({ loans });
+    return NextResponse.json({ loans: loans ?? [] });
 }

@@ -59,7 +59,7 @@ export async function GET(request: NextRequest) {
             },
         });
 
-        return NextResponse.json({ readers }, { status: 200 });
+        return NextResponse.json({ readers: readers ?? [] }, { status: 200 });
     } catch (error: any) {
         console.log(error);
         return NextResponse.json({ error: error.errors }, { status: 500 });

@@ -9,5 +9,5 @@ export async function GET(request: NextRequest) {
         select: { id: true, name: true },
     });
 
-    return NextResponse.json({ publishingCompanies });
+    return NextResponse.json({ publishingCompanies: publishingCompanies ?? [] });
 }
